@@ -78,15 +78,20 @@ public class ConfigSettings {
     // System.exit( 0 );
     config.setProperty( "test", "" );
     config.setProperty( "REGEX.PROPERTY_PREFIX_REGEX", "^\\s*<PackageProperty\\s+name=\"" );
-    config.setProperty( "REGEX.PROPERTY_SUFFIX_REGEX", "\"\\s*><!\\[CDATA\\[\\s*(.*)\\s*\\]\\]></PackageProperty>\\s*$" );
+    config
+        .setProperty( "REGEX.PROPERTY_SUFFIX_REGEX", "\"\\s*><!\\[CDATA\\[\\s*(.*)\\s*\\]\\]></PackageProperty>\\s*$" );
     config.setProperty( "REGEX.PROPERTY_PREFIX", "    <PackageProperty name=\"" );
     config.setProperty( "REGEX.PROPERTY_MIDDLE", "\"><![CDATA[ " );
-    config.setProperty( "REGEX.PROPERTY_SUFFIX",  " ]]></PackageProperty>\n" );
-    config.setProperty( "REGEX.ATTR_ENABLE_LHA_RULES",  "<ITEM NAME=\"ENABLE_LHA_RULES\" TYPE=\"ATTRIBUTE\" USAGE=\"QUESTION\" DATATYPE=\"BOOLEAN\">" );
-    config.setProperty( "REGEX.ATTR_ENABLE_LHA_POSTCODES",  "<ITEM NAME=\"ENABLE_LHA_POSTCODES\" TYPE=\"ATTRIBUTE\" USAGE=\"QUESTION\" DATATYPE=\"BOOLEAN\">" );
-    config.setProperty( "REGEX.ATTR_LHA_AREAS_INFO",  "<ITEM NAME=\"LHA_AREAS_INFO\" TYPE=\"ATTRIBUTE\" USAGE=\"QUESTION\" DATATYPE=\"TABLE\">" );
-    config.setProperty( "REGEX.ATTR_LHA_RATES_INFO",  "<ITEM NAME=\"LHA_RATES_INFO\" TYPE=\"ATTRIBUTE\" USAGE=\"QUESTION\" DATATYPE=\"TABLE\">" );
-    
+    config.setProperty( "REGEX.PROPERTY_SUFFIX", " ]]></PackageProperty>\n" );
+    config.setProperty( "REGEX.ATTR_ENABLE_LHA_RULES",
+        "<ITEM NAME=\"ENABLE_LHA_RULES\" TYPE=\"ATTRIBUTE\" USAGE=\"QUESTION\" DATATYPE=\"BOOLEAN\">" );
+    config.setProperty( "REGEX.ATTR_ENABLE_LHA_POSTCODES",
+        "<ITEM NAME=\"ENABLE_LHA_POSTCODES\" TYPE=\"ATTRIBUTE\" USAGE=\"QUESTION\" DATATYPE=\"BOOLEAN\">" );
+    config.setProperty( "REGEX.ATTR_LHA_AREAS_INFO",
+        "<ITEM NAME=\"LHA_AREAS_INFO\" TYPE=\"ATTRIBUTE\" USAGE=\"QUESTION\" DATATYPE=\"TABLE\">" );
+    config.setProperty( "REGEX.ATTR_LHA_RATES_INFO",
+        "<ITEM NAME=\"LHA_RATES_INFO\" TYPE=\"ATTRIBUTE\" USAGE=\"QUESTION\" DATATYPE=\"TABLE\">" );
+
     try {
       config.saveConfig( new File(
           "/Users/stephenfallis/work/eclipse-workspace/lhaupdater/src/main/resources/lhaupdater_config.xml" ) );
@@ -330,8 +335,7 @@ public class ConfigSettings {
       if ( rootNodes.item( i ).getNodeType( ) == Node.COMMENT_NODE ) {
         prevComment = rootNodes.item( i ).getTextContent( );
       } else if ( rootNodes.item( i ).getNodeType( ) == Node.ELEMENT_NODE ) {
-        if ( rootNodes.item( i ).getNodeName( ).compareTo(
-            ConfigGroup.groupElem ) == 0 ) {
+        if ( rootNodes.item( i ).getNodeName( ).compareTo( ConfigGroup.groupElem ) == 0 ) {
           Element cge = ( Element ) rootNodes.item( i );
           ConfigGroup cg = new ConfigGroup( cge.getAttribute( "id" ) );
           if ( prevComment != null ) {
@@ -361,11 +365,9 @@ public class ConfigSettings {
     String prevComment = null;
     for ( int i = 0; i < properties.getLength( ); i++ ) {
       if ( properties.item( i ).getNodeType( ) == Node.ELEMENT_NODE ) {
-        if ( properties.item( i ).getNodeName( ).compareTo(
-            ConfigProperty.elementName ) == 0 ) {
+        if ( properties.item( i ).getNodeName( ).compareTo( ConfigProperty.elementName ) == 0 ) {
           Element e = ( Element ) properties.item( i );
-          ConfigProperty p = new ConfigProperty( e.getAttribute( "id" ), cg
-              .getGroupName( ), e.getTextContent( ) );
+          ConfigProperty p = new ConfigProperty( e.getAttribute( "id" ), cg.getGroupName( ), e.getTextContent( ) );
 
           // If a previous comment was found, use it and null it
           if ( prevComment != null ) {
@@ -396,13 +398,11 @@ public class ConfigSettings {
     try {
       InputSource is = new InputSource( );
       is.setCharacterStream( new FileReader( f ) );
-      DocumentBuilder db = DocumentBuilderFactory.newInstance( )
-          .newDocumentBuilder( );
+      DocumentBuilder db = DocumentBuilderFactory.newInstance( ).newDocumentBuilder( );
 
       return db.parse( is );
     } catch ( Exception e ) {
-      throw new ConfigurationException( "Problem Parsing XML Document: \n"
-          + e.toString( ) );
+      throw new ConfigurationException( "Problem Parsing XML Document: \n" + e.toString( ) );
     }
   }
 
@@ -422,8 +422,7 @@ public class ConfigSettings {
     Transformer xformer = tf.newTransformer( );
     xformer.setOutputProperty( OutputKeys.INDENT, "yes" );
 
-    xformer.transform( new DOMSource( doc ), new StreamResult(
-        new OutputStreamWriter( new FileOutputStream( f ) ) ) );
+    xformer.transform( new DOMSource( doc ), new StreamResult( new OutputStreamWriter( new FileOutputStream( f ) ) ) );
   }
 
   /**
@@ -434,8 +433,7 @@ public class ConfigSettings {
    */
   public void saveConfig( File configFile ) throws ConfigurationException, FileNotFoundException {
     try {
-      Document d = DocumentBuilderFactory.newInstance( ).newDocumentBuilder( )
-          .newDocument( );
+      Document d = DocumentBuilderFactory.newInstance( ).newDocumentBuilder( ).newDocument( );
       Element root = d.createElement( ConfigSettings.rootElem );
       d.appendChild( root );
 
@@ -443,8 +441,7 @@ public class ConfigSettings {
       Collections.sort( groups );
 
       // Add items from default group directly to the config.
-      buildPropertyGroupNode( getConfigGroupFromKey( defaultGroupName )
-          .getPropertyIterator( ), root, d );
+      buildPropertyGroupNode( getConfigGroupFromKey( defaultGroupName ).getPropertyIterator( ), root, d );
 
       // Create Group nodes and add properties to them
       Iterator<ConfigGroup> icg = groups.iterator( );
@@ -490,8 +487,7 @@ public class ConfigSettings {
    * @param d
    *          The document (used to create new nodes only)
    */
-  private void buildPropertyGroupNode(
-      Iterator<ConfigProperty> propertyIterator, Element appendNode, Document d ) {
+  private void buildPropertyGroupNode( Iterator<ConfigProperty> propertyIterator, Element appendNode, Document d ) {
     while ( propertyIterator.hasNext( ) ) {
       ConfigProperty p = propertyIterator.next( );
 
@@ -651,7 +647,7 @@ public class ConfigSettings {
     private String groupName;
 
     /**
-     *The comment associated with the group
+     * The comment associated with the group
      */
     private String groupComment = "";
 
@@ -710,8 +706,7 @@ public class ConfigSettings {
     @Override
     public String toString( ) {
       StringBuilder sb = new StringBuilder( );
-      sb.append( "ConfigGroup [name=" + groupName + ", comment=" + groupComment
-          + "\n" );
+      sb.append( "ConfigGroup [name=" + groupName + ", comment=" + groupComment + "\n" );
       Iterator<ConfigProperty> i = getPropertyIterator( );
       while ( i.hasNext( ) ) {
         ConfigProperty p = i.next( );
@@ -786,8 +781,7 @@ public class ConfigSettings {
 
     @Override
     public String toString( ) {
-      return "ConfigProperty [name=" + name + ", group=" + group + ", value="
-          + value + "comment=" + comment + "]";
+      return "ConfigProperty [name=" + name + ", group=" + group + ", value=" + value + "comment=" + comment + "]";
     }
 
     public String getGroup( ) {

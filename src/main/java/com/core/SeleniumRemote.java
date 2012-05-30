@@ -8,5 +8,5 @@ package com.core;
  *  different machines.
  */
 public class SeleniumRemote {
-	
+
 }

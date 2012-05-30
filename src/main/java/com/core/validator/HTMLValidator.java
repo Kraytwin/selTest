@@ -1,68 +1,98 @@
 package com.core.validator;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLConnection;
 
-import javax.xml.soap.SOAPConnection;
-import javax.xml.soap.SOAPConnectionFactory;
-import javax.xml.soap.SOAPException;
-import javax.xml.soap.SOAPMessage;
+public class HTMLValidator extends StandardValidator {
 
-import com.rexsl.w3c.Validator;
-import com.rexsl.w3c.ValidatorBuilder;
-import com.rexsl.w3c.ValidationResponse;
+  private boolean isFragment = true;
+  private String uri, outputFormat, charset, doctype, verbose, debug, ss;
 
-public class HTMLValidator implements Validator {
+  public HTMLValidator( String validatorURI ) {
+    super( "validatorURI" );
+    this.uri = validatorURI;
+    outputFormat = "soap12";
 
-	private String uri;
-	private URLConnection connect;
-	private HttpURLConnection connection;
-	private InputStream in;
-	
-	public HTMLValidator( String validatorURI ) {
-		this.uri = validatorURI;
-		
-		
-	}
-	
-	public ValidationResponse validate( String document ) {
-		
-		try {
-			URL url = new URL( uri + "?output=soap12&fragment=" + document );
-			System.out.println( url.toString( ) );
-			connect = url.openConnection( );
-			connection = ( HttpURLConnection ) connect;
-			connection.setDoOutput( true );
-			connection.setRequestMethod( "GET" );
-		
-			in = connection.getInputStream( );
+  }
 
-			BufferedReader rd = new BufferedReader(new InputStreamReader(in));
-			StringBuffer sb = new StringBuffer();
-			String line;
-			while ((line = rd.readLine()) != null)
-			{
-			sb.append(line + "\n");
-			}
-			rd.close();
-			System.out.println(sb.toString());
-			} catch (Exception e)
-			{
-			e.printStackTrace();
-			}
-		
-		return null;
-	}
-	
-	public static void main( String [] args ) {
-		HTMLValidator html = new HTMLValidator( "http://localhost/w3c-validator/check" );
-		html.validate( "<!DOCTYPE html><html><body><h1>My First Heading</h1><p>My first paragraph.</p></body></html>" );
-	}
-	
+  /**
+   * If true will set the validator to use fragments. If false it will use URIs.
+   * 
+   * @param val
+   */
+  public void setFragment( boolean val ) {
+    isFragment = val;
+  }
+
+  /**
+   * Sets the character encoding. This is ignored if the content is a fragment. This can be unset by
+   * entering a blank string.
+   * 
+   * @param charset
+   */
+  public void setCharset( String charset ) {
+    this.charset = setParameter( "charset", charset );
+  }
+
+  /**
+   * Sets the doctype. This is ignored if the content is a fragment. This can be unset by entering a
+   * blank string.
+   * 
+   * @param doctype
+   */
+  public void setDoctype( String doctype ) {
+    this.doctype = setParameter( "doctype", doctype );
+  }
+
+  /**
+   * Makes explanations, error messages and other diagnostics more verbose.
+   * Does not have any impact with SOAP and by default is off.
+   * 
+   * @param val
+   */
+  public void setVerbose( boolean val ) {
+    if ( val ) {
+      this.verbose = setParameter( "verbose", "1" );
+    } else {
+      verbose = "";
+    }
+  }
+
+  /**
+   * Adds in extra debug information into the response. Is off by default.
+   * 
+   * @param val
+   */
+  public void setDebug( boolean val ) {
+    if ( val ) {
+      this.debug = setParameter( "debug", "1" );
+    } else {
+      debug = "";
+    }
+  }
+
+  /**
+   * Displays the source after the validation.
+   * Does not have any impact with SOAP and by default is off.
+   * 
+   * @param val
+   */
+  public void setShowSource( boolean val ) {
+    if ( val ) {
+      this.ss = setParameter( "ss", "1" );
+    } else {
+      ss = "";
+    }
+  }
+
+  // Output parameter is not dealt with as it only works with the web interface.
+
+  public String generateQuery( ) {
+    String query = "?output=" + outputFormat + charset + doctype + verbose + debug + ss + "&";
+    if ( isFragment ) {
+      return query + "fragment=";
+    } else {
+      return query + "uri=";
+    }
+
+  }
+
 }
