@@ -6,7 +6,7 @@ import com.thoughtworks.selenium.*;
 
 //import java.util.regex.Pattern;
 
-public class RochdaleChange extends SeleneseTestCase {
+public class RochdaleChange {
 
   private DefaultSelenium selenium;
   private String name, type, directory;
@@ -21,7 +21,7 @@ public class RochdaleChange extends SeleneseTestCase {
   }
 
   public void testNew( ) throws Exception {
-    Screenshot sc = new Screenshot( "Change", name, type, directory );
+    Screenshot sc = new Screenshot( "Change", name, type, directory, selenium );
 
     // N.B. Some of the comments are out. Some comments take place before that particular validation
     // has occurred others after

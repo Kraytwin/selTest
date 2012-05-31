@@ -5,7 +5,7 @@ import com.core.*;
 
 //import java.util.regex.Pattern;
 
-public class IntegrationTests extends SeleneseTestCase {
+public class IntegrationTests {
 
   private DefaultSelenium selenium;
   private String name, type, directory;
@@ -20,7 +20,7 @@ public class IntegrationTests extends SeleneseTestCase {
   }
 
   public void testNew( ) throws Exception {
-    Screenshot sc = new Screenshot( "Change", name, type, directory );
+    Screenshot sc = new Screenshot( "Change", name, type, directory, selenium );
 
     selenium.open( "/index.jsp" );
     selenium.windowFocus( );

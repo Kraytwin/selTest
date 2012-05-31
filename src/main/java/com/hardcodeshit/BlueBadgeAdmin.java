@@ -5,7 +5,7 @@ import com.core.Screenshot;
 import com.thoughtworks.selenium.DefaultSelenium;
 import com.thoughtworks.selenium.SeleneseTestCase;
 
-public class BlueBadgeAdmin extends SeleneseTestCase {
+public class BlueBadgeAdmin {
 
   private DefaultSelenium selenium;
   private String name, type, directory;
@@ -20,7 +20,7 @@ public class BlueBadgeAdmin extends SeleneseTestCase {
   }
 
   public void testNew( ) throws Exception {
-    Screenshot sc = new Screenshot( "BlueBadgeAdmin", name, type, directory );
+    Screenshot sc = new Screenshot( "BlueBadgeAdmin", name, type, directory, selenium );
 
     selenium.open( "/admin/app/" );
     selenium.windowFocus( );

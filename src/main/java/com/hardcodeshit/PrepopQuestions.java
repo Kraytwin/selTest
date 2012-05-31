@@ -6,7 +6,7 @@ import com.thoughtworks.selenium.*;
 
 //import java.util.regex.Pattern;
 
-public class PrepopQuestions extends SeleneseTestCase {
+public class PrepopQuestions {
 
   private DefaultSelenium selenium;
   private String name, type, directory;
@@ -21,7 +21,6 @@ public class PrepopQuestions extends SeleneseTestCase {
   }
 
   public void testNew( ) throws Exception {
-    Screenshot sc = new Screenshot( "ChangePrepop", name, type, directory );
 
     // N.B. Some of the comments are out. Some comments take place before that particular validation
     // has occurred others after
