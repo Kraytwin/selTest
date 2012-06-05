@@ -70,5 +70,17 @@ public class SeleniumMain {
     }
 
   }
+  
+  public ArrayList<Browser> getBroswers(  ) {
+	  return null;
+  }
+  
+  public ArrayList<String> getSites( ) {
+	  return null;
+  }
+  
+  public ArrayList<String> getTests( ) {
+	  return null;
+  }
 
 }

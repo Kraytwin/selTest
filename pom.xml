@@ -103,11 +103,11 @@
   </dependencies>
   
   <repositories>
-  	<repository>
+  	<!-- <repository>
   		<id>update.teamnetsol.com-releases</id>
   		<name>update.teamnetsol.com-releases</name>
   		<url>https://dev.teamnetsol.com:443/mvnrepository/libs-releases-local</url>
-  	</repository>
+  	</repository> -->
     <repository>
       <id>central2</id>
       <name>Maven Repository Switchboard</name>
