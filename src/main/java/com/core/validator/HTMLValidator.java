@@ -1,6 +1,5 @@
 package com.core.validator;
 
-
 public class HTMLValidator extends StandardValidator {
 
   private boolean isFragment = true;
