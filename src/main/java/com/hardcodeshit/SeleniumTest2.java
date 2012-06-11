@@ -2,7 +2,7 @@ package com.hardcodeshit;
 
 import com.core.Browser;
 import com.core.Screenshot;
-import com.thoughtworks.selenium.*;
+import com.thoughtworks.selenium.DefaultSelenium;
 
 //import java.util.regex.Pattern;
 
@@ -14,7 +14,7 @@ public class SeleniumTest2 {
   public void setUp( Browser browser ) throws Exception {
     name = browser.getName( );
     type = browser.getType( );
-    directory = browser.getScreenshotDirectory( );
+    directory = browser.getSpecialDirectory( );
     selenium = new DefaultSelenium( browser.getServerIP( ), 4444, "*" + type + " " + browser.getFileLocation( ),
         "https://10.0.0.32/" );
     selenium.start( );

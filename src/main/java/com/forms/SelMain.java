@@ -6,8 +6,12 @@ package com.forms;
 
 import java.awt.Component;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import javax.swing.event.ListSelectionListener;
+
+import com.core.Browser;
+import com.core.SiteList;
 
 /**
  * 
@@ -377,6 +381,21 @@ public class SelMain extends javax.swing.JFrame {
 
   public void quit( ) {
     this.dispose( );
+  }
+
+  public void updateBrowserList( ArrayList<Browser> browsers ) {
+    validate( );
+    repaint( );
+  }
+
+  public void updateSiteList( SiteList sites ) {
+    validate( );
+    repaint( );
+  }
+
+  public void updateTestList( ArrayList<String> tests ) {
+    validate( );
+    repaint( );
   }
 
   // Variables declaration - do not modify//GEN-BEGIN:variables

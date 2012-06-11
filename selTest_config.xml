@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Config>
+  <!--Properties related to running Selenium-->
+  <ConfigGroup id="SELENIUM">
+    <ConfigSetting id="JAR_LOCATION"><![CDATA[lib/]]></ConfigSetting>
+    <ConfigSetting id="JAR_NAME"><![CDATA[selenium-server-standalone-2.21.0.jar]]></ConfigSetting>
+    <ConfigSetting id="FIREFOX_PROFILE"><![CDATA[TRUE]]></ConfigSetting>
+    <ConfigSetting id="FIREFOX_PROFILE_LOCATION"><![CDATA[~/Library/Application\ Support/Firefox/Profiles/qcb9xy5k.Selenium/ ]]></ConfigSetting>
+    <ConfigSetting id="TRUST_ALL_SSL_CERTIFICATES"><![CDATA[TRUE]]></ConfigSetting>
+    <ConfigSetting id="IE"><![CDATA[-J-Dhttps.protocols=SSLv3 -J-Dforce.http.jre.executor=true]]></ConfigSetting>
+  </ConfigGroup>
+  <!--Properties related to locations of files and folders needed by the program-->
+  <ConfigGroup id="FILE_SYSTEM">
+    <ConfigSetting id="BROWSER_FILE_LOCATION"><![CDATA[conf/browser.csv]]></ConfigSetting>
+    <ConfigSetting id="SITE_FILE_LOCATION"><![CDATA[conf/site.txt]]></ConfigSetting>
+    <ConfigSetting id="TEST_DIR_LOCATION"><![CDATA[conf/]]></ConfigSetting>
+    <ConfigSetting id="SPECIAL_CONFIG_LOCATION_OS_X"><![CDATA[~/Desktop/SeleniumTester/Special/]]></ConfigSetting>
+    <ConfigSetting id="SPECIAL_CONFIG_LOCATION_WIN"><![CDATA[%UserProfile%My Documents\SeleniumTester\Special]]></ConfigSetting>
+  </ConfigGroup>
+  <!--General configuration properties-->
+  <ConfigGroup id="GENERAL">
+    <ConfigSetting id="DEFAULT_IP"><![CDATA[127.0.0.1]]></ConfigSetting>
+  </ConfigGroup> 
+</Config>

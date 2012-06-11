@@ -1,7 +1,8 @@
 package com.hardcodeshit;
 
-import com.thoughtworks.selenium.*;
-import com.core.*;
+import com.core.Browser;
+import com.core.Screenshot;
+import com.thoughtworks.selenium.DefaultSelenium;
 
 //import java.util.regex.Pattern;
 
@@ -13,7 +14,7 @@ public class IntegrationTests {
   public void setUp( Browser browser ) throws Exception {
     name = browser.getName( );
     type = browser.getType( );
-    directory = browser.getScreenshotDirectory( );
+    directory = browser.getSpecialDirectory( );
     selenium = new DefaultSelenium( browser.getServerIP( ), 4444, "*" + type + " " + browser.getFileLocation( ),
         "https://rochdalechangetest.teamnetsol.com/" );
     selenium.start( );

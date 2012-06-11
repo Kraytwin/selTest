@@ -1,12 +1,11 @@
 package com.hardcodeshit;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
 
-import com.thoughtworks.selenium.*;
-import com.core.*;
+import com.core.Browser;
+import com.core.Screenshot;
+import com.thoughtworks.selenium.DefaultSelenium;
+import com.thoughtworks.selenium.SeleniumException;
 
 //import java.util.regex.Pattern;
 
@@ -20,7 +19,7 @@ public class DocGenTest {
   public void setUp( Browser browser ) {
     name = browser.getName( );
     type = browser.getType( );
-    directory = browser.getScreenshotDirectory( );
+    directory = browser.getSpecialDirectory( );
     selenium = new DefaultSelenium( browser.getServerIP( ), 4444, "*" + type + " " + browser.getFileLocation( ),
         "https://10.0.0.32/" );
     selenium.start( );

@@ -5,7 +5,6 @@ import java.io.IOException;
 import com.core.Browser;
 import com.core.Screenshot;
 import com.thoughtworks.selenium.DefaultSelenium;
-import com.thoughtworks.selenium.SeleniumException;
 
 public class BBCTest {
 
@@ -17,7 +16,7 @@ public class BBCTest {
   public void setUp( Browser browser ) {
     name = browser.getName( );
     type = browser.getType( );
-    directory = browser.getScreenshotDirectory( );
+    directory = browser.getSpecialDirectory( );
     selenium = new DefaultSelenium( browser.getServerIP( ), 4444, "*" + type + " " + browser.getFileLocation( ),
         "http://www.bbc.co.uk/" );
     selenium.start( );

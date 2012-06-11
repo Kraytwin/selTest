@@ -16,7 +16,7 @@ public class DurhamTest {
   public void setUp( Browser browser ) {
     name = browser.getName( );
     type = browser.getType( );
-    directory = browser.getScreenshotDirectory( );
+    directory = browser.getSpecialDirectory( );
     selenium = new DefaultSelenium( browser.getServerIP( ), 4444, "*" + type + " " + browser.getFileLocation( ),
         "https://127.0.0.1/" );
     selenium.start( );
