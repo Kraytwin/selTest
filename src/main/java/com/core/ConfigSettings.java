@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -21,8 +22,6 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-
-//import nslib.util.NSXML.XMLException;
 
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
@@ -53,15 +52,45 @@ import org.xml.sax.SAXException;
  * the appropriate get/set comment methods
  * 
  * @author James Philipps
- * 
+ * @modified Stephen Fallis
  */
 public class ConfigSettings {
 
   public static void main( String[ ] args ) {
+    String osName = System.getProperty( "os.name" );
+    String userHome = System.getProperty( "user.home" );
     ConfigSettings config = ConfigSettings.getInstance( );
+    File configDir = null;
     try {
-      config.loadConfig( new File(
-          "/Users/stephenfallis/work/eclipse-workspace/lhaupdater/src/main/resources/lhaupdater_config.xml" ) );
+      config.setWriteBlankElements( true );
+      config.loadDefaultConfig( config.getClass( ).getClassLoader( ).getResourceAsStream( "selTest_config.xml" ) );
+      if ( osName.startsWith( "Mac OS" ) ) {
+        String configLocation = config.getProperty( "FILE_SYSTEM.SETTINGS_LOCATION_OS_X" ) + ".seleniumtester";
+        configDir = new File( userHome, configLocation );
+        System.out.println( configDir );
+        if ( !configDir.exists( ) ) {
+          System.out.println( "Creating OS_X folder " + configDir.mkdir( ) );
+        }
+
+      } else if ( osName.startsWith( "Windows" ) ) {
+        String configLocation = config.getProperty( "FILE_SYSTEM.SETTINGS_LOCATION_WIN" ) + "SeleniumTester";
+        configDir = new File( userHome, configLocation );
+        if ( !configDir.exists( ) ) {
+          System.out.println( "Creating Win folder " + configDir.mkdir( ) );
+        }
+      } else {
+        // XXX Need to sort out for Unix
+        System.out.println( "Operating System not recognised" );
+      }
+      File currentConfigFile = new File( configDir, "selTest_config.xml" );
+      // XXX Need to make this better and remove OS_X or Win settings depending.
+      if ( !currentConfigFile.exists( ) ) {
+        config.saveConfig( currentConfigFile );
+      } else {
+        System.out.println( "Already Exists" );
+      }
+      config.loadConfig( currentConfigFile );
+
     } catch ( ConfigurationException e1 ) {
       // TODO Auto-generated catch block
       e1.printStackTrace( );
@@ -69,38 +98,9 @@ public class ConfigSettings {
       // TODO Auto-generated catch block
       e1.printStackTrace( );
     }
-
     Iterator<ConfigProperty> i = config.getPropertyIterator( );
     while ( i.hasNext( ) ) {
       System.out.println( i.next( ) );
-    }
-    config.setWriteBlankElements( false );
-    // System.exit( 0 );
-    config.setProperty( "test", "" );
-    config.setProperty( "REGEX.PROPERTY_PREFIX_REGEX", "^\\s*<PackageProperty\\s+name=\"" );
-    config
-        .setProperty( "REGEX.PROPERTY_SUFFIX_REGEX", "\"\\s*><!\\[CDATA\\[\\s*(.*)\\s*\\]\\]></PackageProperty>\\s*$" );
-    config.setProperty( "REGEX.PROPERTY_PREFIX", "    <PackageProperty name=\"" );
-    config.setProperty( "REGEX.PROPERTY_MIDDLE", "\"><![CDATA[ " );
-    config.setProperty( "REGEX.PROPERTY_SUFFIX", " ]]></PackageProperty>\n" );
-    config.setProperty( "REGEX.ATTR_ENABLE_LHA_RULES",
-        "<ITEM NAME=\"ENABLE_LHA_RULES\" TYPE=\"ATTRIBUTE\" USAGE=\"QUESTION\" DATATYPE=\"BOOLEAN\">" );
-    config.setProperty( "REGEX.ATTR_ENABLE_LHA_POSTCODES",
-        "<ITEM NAME=\"ENABLE_LHA_POSTCODES\" TYPE=\"ATTRIBUTE\" USAGE=\"QUESTION\" DATATYPE=\"BOOLEAN\">" );
-    config.setProperty( "REGEX.ATTR_LHA_AREAS_INFO",
-        "<ITEM NAME=\"LHA_AREAS_INFO\" TYPE=\"ATTRIBUTE\" USAGE=\"QUESTION\" DATATYPE=\"TABLE\">" );
-    config.setProperty( "REGEX.ATTR_LHA_RATES_INFO",
-        "<ITEM NAME=\"LHA_RATES_INFO\" TYPE=\"ATTRIBUTE\" USAGE=\"QUESTION\" DATATYPE=\"TABLE\">" );
-
-    try {
-      config.saveConfig( new File(
-          "/Users/stephenfallis/work/eclipse-workspace/lhaupdater/src/main/resources/lhaupdater_config.xml" ) );
-    } catch ( FileNotFoundException e ) {
-      // TODO Auto-generated catch block
-      e.printStackTrace( );
-    } catch ( ConfigurationException e ) {
-      // TODO Auto-generated catch block
-      e.printStackTrace( );
     }
   }
   /**
@@ -144,6 +144,11 @@ public class ConfigSettings {
   private ConfigSettings( ) {
     this.init( );
   }
+
+  /**
+   * Used to prevent saving to the internal config.
+   */
+  private boolean hasExternalConfig = false;
 
   /**
    * Clears all previous config options and sets up a new blank config object
@@ -313,6 +318,26 @@ public class ConfigSettings {
    */
   public void loadConfig( File configFile ) throws ConfigurationException, IOException {
     Document doc = parseDocument( configFile );
+    this.loadConfig( doc );
+    this.hasExternalConfig = true;
+    currentConfigFile = configFile;
+  }
+
+  /**
+   * Loads the configuration options from the default XML file in the JAR.
+   * 
+   * @param configFile
+   * @throws ConfigurationException
+   * @throws IOException
+   */
+  private void loadDefaultConfig( InputStream is ) throws ConfigurationException, IOException {
+    Document doc = parseDocument( is );
+    this.loadConfig( doc );
+    this.hasExternalConfig = false;
+
+  }
+
+  private void loadConfig( Document doc ) throws ConfigurationException, IOException {
     Element root = doc.getDocumentElement( );
 
     // reset config
@@ -348,8 +373,6 @@ public class ConfigSettings {
         }
       }
     }
-
-    currentConfigFile = configFile;
   }
 
   /**
@@ -407,6 +430,27 @@ public class ConfigSettings {
   }
 
   /**
+   * Parse an InputStream to a Document object
+   * 
+   * @param is
+   *          InputStream to parse
+   * @return A Document object representing the InputStream
+   * @throws XMLException
+   * @throws SAXException
+   * @throws IOException
+   * @throws ParserConfigurationException
+   */
+  private Document parseDocument( InputStream is ) throws ConfigurationException {
+    try {
+      DocumentBuilder db = DocumentBuilderFactory.newInstance( ).newDocumentBuilder( );
+
+      return db.parse( is );
+    } catch ( Exception e ) {
+      throw new ConfigurationException( "Problem Parsing InputStream: \n" + e.toString( ) );
+    }
+  }
+
+  /**
    * Saves an XML Document object to an XML text file
    * 
    * @param doc
@@ -417,9 +461,12 @@ public class ConfigSettings {
    */
   private void saveDocToFile( Document doc, File f ) throws TransformerException, FileNotFoundException {
     TransformerFactory tf = TransformerFactory.newInstance( );
-    tf.setAttribute( "indent-number", new Integer( 2 ) );
+    // Commented out as it causes an IlegalArgumentException
+    // tf.setAttribute( "indent-number", new Integer( 2 ) );
 
     Transformer xformer = tf.newTransformer( );
+    // Work around to stop IllegalArgumentException
+    xformer.setOutputProperty( "{http://xml.apache.org/xslt}indent-amount", "2" );
     xformer.setOutputProperty( OutputKeys.INDENT, "yes" );
 
     xformer.transform( new DOMSource( doc ), new StreamResult( new OutputStreamWriter( new FileOutputStream( f ) ) ) );
@@ -468,6 +515,7 @@ public class ConfigSettings {
       }
 
       saveDocToFile( d, configFile );
+      currentConfigFile = configFile;
     } catch ( DOMException e ) {
       throw new ConfigurationException( e );
     } catch ( ParserConfigurationException e ) {

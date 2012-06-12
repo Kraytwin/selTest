@@ -13,6 +13,14 @@
         <directory>src/com/core</directory>
       </resource>
     </resources> -->
+    <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+        <includes>
+          <include>*.xml</include>
+        </includes>
+      </resource>
+    </resources>
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId> 
@@ -48,7 +56,7 @@
           </descriptorRefs>
           <archive>
             <manifest>
-              <mainClass>com.core.Run</mainClass>
+              <mainClass>com.core.ConfigSettings</mainClass>
             </manifest>
           </archive>
         </configuration>
