@@ -2,6 +2,7 @@ package com.core;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -13,9 +14,25 @@ public class SelMainController {
   private SelMain sel;
   private ActionListener buttonListener;
   private ListSelectionListener listListener;
-
+  private ConfigSettings config = ConfigSettings.getInstance( );
+  private File browserLocation, siteLocation;
+  private BrowserHandler bh;
+  private SiteList sl;
+  
+  
+  
   public SelMainController( ) {
+    //First need to get the relevant config settings
+    browserLocation = new File( this.config.getProperty( "FILE_SYSTEM.BROWSER_FILE_LOCATION" ) );
+    siteLocation = new File( this.config.getProperty( "FILE_SYSTEM.SITE_FILE_LOCATION" ) );
+    
+    bh = new BrowserHandler( browserLocation );
+    sl = new SiteList( siteLocation );
+    
     sel = new SelMain( );
+
+    this.updateBrowserList(  );
+    this.updateSiteList(  );
 
     // Now to initialise the listeners.
     this.initListeners( );
@@ -23,6 +40,8 @@ public class SelMainController {
     // And now to use the listeners.
     sel.addActionListeners( buttonListener );
     sel.addListSelectionListeners( listListener );
+    
+    sel.setVisible( true );
   }
 
   private void initListeners( ) {
@@ -137,7 +156,7 @@ public class SelMainController {
   }
   
   private void updateSiteList( ) {
-    // TODO Auto-generated method stub
+    sel.updateSiteList( sl );
     
   }
 
@@ -147,7 +166,7 @@ public class SelMainController {
   }
 
   private void updateBrowserList( ) {
-    // TODO Auto-generated method stub
+    sel.updateBrowserList( bh.readBrowsers( ) );
     
   }
 
@@ -189,7 +208,7 @@ public class SelMainController {
     java.awt.EventQueue.invokeLater( new Runnable( ) {
 
       public void run( ) {
-        new SelMain( ).setVisible( true );
+        new SelMainController( );
       }
     } );
   }

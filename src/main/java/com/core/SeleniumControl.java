@@ -14,16 +14,8 @@ public class SeleniumControl {
   public DefaultSelenium setUp( Browser browser, String URL ) throws Exception {
     name = browser.getName( );
     type = browser.getType( );
-    if ( browser.hasAlternativeIP( ) ) {
-      IP = browser.getServerIP( );
-    } else {
-      // XXX Get default IP
-    }
-    if ( browser.hasAlternativeDirectory( ) ) {
-      directory = browser.getSpecialDirectory( );
-    } else {
-      // XXX Get Default Directory
-    }
+    IP = browser.getServerIP( );
+    directory = browser.getSpecialDirectory( );
 
     selenium = new DefaultSelenium( IP, 4444, "*" + type + " " + browser.getFileLocation( ), URL );
     selenium.start( );

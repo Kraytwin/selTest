@@ -384,11 +384,42 @@ public class SelMain extends javax.swing.JFrame {
   }
 
   public void updateBrowserList( ArrayList<Browser> browsers ) {
+   String [] newList = new String [ browsers.size( ) ];
+    for( int i = 0; i < browsers.size( ); i++ ) {
+     newList[ i ] = browsers.get( i ).getName( ); 
+   }
+    final String [] list = newList;
+   browserList.setModel( new javax.swing.AbstractListModel( ) {
+     public int getSize( ) {
+       return list.length;
+     }
+
+     public Object getElementAt( int i ) {
+       return list[ i ].toString();
+     }
+   } );
+   
     validate( );
     repaint( );
   }
 
   public void updateSiteList( SiteList sites ) {
+    ArrayList<String> siteArray = sites.getSiteList( );
+    String [] newList = new String [ siteArray.size( ) ];
+    
+    for( int i = 0; i < siteArray.size( ); i++ ) {
+      newList[ i ] = siteArray.get( i ); 
+    }
+     final String [] list = newList;
+    siteList.setModel( new javax.swing.AbstractListModel( ) {
+      public int getSize( ) {
+        return list.length;
+      }
+
+      public Object getElementAt( int i ) {
+        return list[ i ];
+      }
+    } );
     validate( );
     repaint( );
   }

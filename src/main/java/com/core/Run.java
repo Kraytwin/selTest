@@ -1,5 +1,6 @@
 package com.core;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -58,7 +59,7 @@ public class Run {
     // BlueBadgePages st = new BlueBadgePages( );
     // BlueBadgeAdmin st = new BlueBadgeAdmin( );
     try {
-      SiteList sites = new SiteList( "/Users/stephenfallis/Desktop/sites.txt" );
+      SiteList sites = new SiteList( new File( "/Users/stephenfallis/Desktop/sites.txt" ) );
       SiteHandler sh;
       for ( Browser currentBrowser : browsers ) {
         st.setUp( currentBrowser );

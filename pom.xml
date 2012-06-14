@@ -56,7 +56,7 @@
           </descriptorRefs>
           <archive>
             <manifest>
-              <mainClass>com.core.ConfigSettings</mainClass>
+              <mainClass>com.core.SelMainController</mainClass>
             </manifest>
           </archive>
         </configuration>

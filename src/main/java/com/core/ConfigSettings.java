@@ -56,53 +56,6 @@ import org.xml.sax.SAXException;
  */
 public class ConfigSettings {
 
-  public static void main( String[ ] args ) {
-    String osName = System.getProperty( "os.name" );
-    String userHome = System.getProperty( "user.home" );
-    ConfigSettings config = ConfigSettings.getInstance( );
-    File configDir = null;
-    try {
-      config.setWriteBlankElements( true );
-      config.loadDefaultConfig( config.getClass( ).getClassLoader( ).getResourceAsStream( "selTest_config.xml" ) );
-      if ( osName.startsWith( "Mac OS" ) ) {
-        String configLocation = config.getProperty( "FILE_SYSTEM.SETTINGS_LOCATION_OS_X" ) + ".seleniumtester";
-        configDir = new File( userHome, configLocation );
-        System.out.println( configDir );
-        if ( !configDir.exists( ) ) {
-          System.out.println( "Creating OS_X folder " + configDir.mkdir( ) );
-        }
-
-      } else if ( osName.startsWith( "Windows" ) ) {
-        String configLocation = config.getProperty( "FILE_SYSTEM.SETTINGS_LOCATION_WIN" ) + "SeleniumTester";
-        configDir = new File( userHome, configLocation );
-        if ( !configDir.exists( ) ) {
-          System.out.println( "Creating Win folder " + configDir.mkdir( ) );
-        }
-      } else {
-        // XXX Need to sort out for Unix
-        System.out.println( "Operating System not recognised" );
-      }
-      File currentConfigFile = new File( configDir, "selTest_config.xml" );
-      // XXX Need to make this better and remove OS_X or Win settings depending.
-      if ( !currentConfigFile.exists( ) ) {
-        config.saveConfig( currentConfigFile );
-      } else {
-        System.out.println( "Already Exists" );
-      }
-      config.loadConfig( currentConfigFile );
-
-    } catch ( ConfigurationException e1 ) {
-      // TODO Auto-generated catch block
-      e1.printStackTrace( );
-    } catch ( IOException e1 ) {
-      // TODO Auto-generated catch block
-      e1.printStackTrace( );
-    }
-    Iterator<ConfigProperty> i = config.getPropertyIterator( );
-    while ( i.hasNext( ) ) {
-      System.out.println( i.next( ) );
-    }
-  }
   /**
    * Singleton instance of the class
    */
@@ -166,9 +119,52 @@ public class ConfigSettings {
    */
   public static ConfigSettings getInstance( ) {
     if ( instance == null ) {
-      instance = new ConfigSettings( );
+      instance = new ConfigSettings( ).initConfig( );
     }
     return instance;
+  }
+  
+  /**
+   * Creates and returns an instance of the config settings.  This will use the default settings and if a local version
+   * of the settings does not yet exist then it will create a directory for it and create a local config settings file.
+   * @return The config settings
+   */
+  private ConfigSettings initConfig( ) {
+    
+    String userHome = System.getProperty( "user.home" );
+    ConfigSettings config = new ConfigSettings( );
+    File configDir = null;
+    try {
+      config.setWriteBlankElements( true );
+      config.loadDefaultConfig( config.getClass( ).getClassLoader( ).getResourceAsStream( "selTest_config.xml" ) );      
+      configDir = new File( userHome, config.getOSProperty( "FILE_SYSTEM.SETTINGS_LOCATION" ) );
+      System.out.println( configDir );
+      if ( !configDir.exists( ) ) {
+        System.out.println( "Creating folder " + configDir.getAbsolutePath( ) + ": " +  configDir.mkdir( ) );
+      }
+      File currentConfigFile = new File( configDir, "selTest_config.xml" );
+      // XXX Need to make this better and remove OS_X or Win settings depending.
+      //Would probably be best to create a method saveOSConfig
+      if ( !currentConfigFile.exists( ) ) {
+        System.out.println( "Config does not yet exist, saving locally." );
+        config.saveConfig( currentConfigFile );
+      } else {
+        System.out.println( "Already Exists" );
+      }
+      config.loadConfig( currentConfigFile );
+
+    } catch ( ConfigurationException e1 ) {
+      // TODO Auto-generated catch block
+      e1.printStackTrace( );
+    } catch ( IOException e1 ) {
+      // TODO Auto-generated catch block
+      e1.printStackTrace( );
+    }
+    Iterator<ConfigProperty> i = config.getPropertyIterator( );
+    while ( i.hasNext( ) ) {
+      System.out.println( i.next( ) );
+    }
+    return config;
   }
 
   /**
@@ -267,6 +263,33 @@ public class ConfigSettings {
     }
 
     return c != null ? c.getComment( ) : null;
+  }
+  
+  /**
+   * Get a property that has OS specific values.  Use dot notation to access groups (group1.property2)
+   * 
+   * @param name
+   *          Name of the property - This does not need the OS suffix
+   * @return  The property, or null if it was not found
+   */
+  public String getOSProperty( String name ) {
+    ConfigGroup cg = getConfigGroupFromKey( name );
+    
+    String osName = System.getProperty( "os.name" );
+    String suffix = "";
+    if ( osName.startsWith( "Mac OS" ) ) {
+      suffix = "_OS_X";
+    } else if ( osName.startsWith("Windows" ) ) {
+      suffix = "_WIN";
+    }
+
+    ConfigProperty c;
+    if ( name.contains( "." ) ) {
+      c = cg.getProperty( name.substring( name.lastIndexOf( "." ) + 1 ) + suffix );
+    } else {
+      c = cg.getProperty( name );
+    }
+    return c != null ? c.getValue( ) : null;
   }
 
   /**

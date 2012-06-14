@@ -1,6 +1,7 @@
 package com.core;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -16,7 +17,7 @@ public class SiteList {
 
   private ArrayList<String> sites;
 
-  public SiteList( String file ) {
+  public SiteList( File file ) {
     sites = new ArrayList<String>( );
     this.readSites( file );
   }
@@ -51,7 +52,7 @@ public class SiteList {
     sites.clear( );
   }
 
-  public ArrayList<String> readSites( String file ) {
+  public ArrayList<String> readSites( File file ) {
     String line;
     try {
       BufferedReader in = new BufferedReader( new FileReader( file ) );

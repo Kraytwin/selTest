@@ -4,12 +4,6 @@ public class Browser {
 
   private String name, type, fileLocation, serverIP, specialDirectory;
 
-  public Browser( String nameIn, String typeIn, String fileLocationIn ) {
-    name = nameIn;
-    type = typeIn;
-    fileLocation = fileLocationIn;
-  }
-
   public Browser( String nameIn, String typeIn, String fileLocationIn, String serverIPIn, String specialDirectoryIn ) {
     serverIP = serverIPIn;
     name = nameIn;
@@ -42,26 +36,12 @@ public class Browser {
     return fileLocation;
   }
 
-  public boolean hasAlternativeIP( ) {
-    if ( serverIP != null || !serverIP.equals( "" ) ) {
-      return true;
-    }
-    return false;
-  }
-
   public void setServerIP( String serverIPIn ) {
     this.serverIP = serverIPIn;
   }
 
   public String getServerIP( ) {
     return serverIP;
-  }
-
-  public boolean hasAlternativeDirectory( ) {
-    if ( specialDirectory != null || !specialDirectory.equals( "" ) ) {
-      return true;
-    }
-    return false;
   }
 
   public void setSpecialDirectory( String specialDirectoryIn ) {
