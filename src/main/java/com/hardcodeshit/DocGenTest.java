@@ -128,6 +128,27 @@ public class DocGenTest {
           selenium.click( "name=TNBnextButton" );
           selenium.waitForPageToLoad( "30000" );
         }
+
+        if ( selenium.isElementPresent( "name=$$BANK_BANK_BRANCH" ) ) {
+          selenium.type( "name=$$BANK_ACCOUNT_HOLDER_NAME", "Netsol Account Holder" );
+          selenium.type( "name=$$BANK_BANK_BRANCH", "010203" );
+          selenium.click( "name=TNBnextButton" );
+          selenium.waitForPageToLoad( "30000" );
+        }
+
+        if ( selenium.isElementPresent( "name=$$BANK_BUILDING_SOCIETY_BRANCH" ) ) {
+          selenium.type( "name=$$BANK_ACCOUNT_HOLDER_NAME", "Netsol Account Holder" );
+          selenium.type( "name=$$BANK_BUILDING_SOCIETY_BRANCH", "010203" );
+          selenium.type( "name=$$BANK_BUILDING_SOCIETY_ACCOUNT", "01234567" );
+          selenium.click( "name=TNBnextButton" );
+          selenium.waitForPageToLoad( "30000" );
+        }
+        if ( selenium.isElementPresent( "name=$$BANK_POST_OFFICE_ACCOUNT" ) ) {
+          selenium.type( "name=$$BANK_ACCOUNT_HOLDER_NAME", "Netsol Account Holder" );
+          selenium.type( "name=$$BANK_POST_OFFICE_ACCOUNT", "01234567" );
+          selenium.click( "name=TNBnextButton" );
+          selenium.waitForPageToLoad( "30000" );
+        }
         /*
          * selenium.select("name=$$DD$DETAILS_DOB_YOU", "label=1");
          * selenium.select("name=$$MM$DETAILS_DOB_YOU", "label=January");

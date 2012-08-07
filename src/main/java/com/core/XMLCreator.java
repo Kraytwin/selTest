@@ -11,7 +11,7 @@ public class XMLCreator {
    */
   public static void main( String[ ] args ) {
     // TODO Auto-generated method stub
-    File dir = new File( "/Users/stephenfallis/Desktop/Selenium_Integration_XML/" );
+    File dir = new File( "/Users/stephenfallis/Desktop/Selenium/Selenium_Integration_Paths/" );
     File[ ] files = dir.listFiles( );
     for ( File fileIn : files ) {
       if ( !fileIn.getName( ).equals( ".DS_Store" ) ) {

@@ -7,6 +7,7 @@ package com.forms;
 import java.awt.Component;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import javax.swing.event.ListSelectionListener;
 
@@ -18,6 +19,8 @@ import com.core.SiteList;
  * @author Stephen Fallis
  */
 public class SelMain extends javax.swing.JFrame {
+
+  private HashMap<String, Component> componentMap;
 
   /**
    * Creates new form NewJFrame
@@ -76,6 +79,8 @@ public class SelMain extends javax.swing.JFrame {
     testMenu = new javax.swing.JMenu( );
     addPasswordMenuItem = new javax.swing.JMenuItem( );
     editTestMenuItem = new javax.swing.JMenuItem( );
+
+    createComponentMap( );
 
     setDefaultCloseOperation( javax.swing.WindowConstants.EXIT_ON_CLOSE );
 
@@ -368,15 +373,19 @@ public class SelMain extends javax.swing.JFrame {
   }
 
   public Component getComponent( String name ) {
-    Component[ ] compList = this.getComponents( );
-
-    for ( Component comp : compList ) {
-      if ( comp.getName( ).equals( name ) ) {
-        return comp;
-      }
+    if ( componentMap.containsKey( name ) ) {
+      return ( Component ) componentMap.get( name );
+    } else {
+      return null;
     }
+  }
 
-    return null;
+  private void createComponentMap( ) {
+    componentMap = new HashMap<String, Component>( );
+    Component[ ] components = this.getContentPane( ).getComponents( );
+    for ( int i = 0; i < components.length; i++ ) {
+      componentMap.put( components[ i ].getName( ), components[ i ] );
+    }
   }
 
   public void quit( ) {
@@ -384,34 +393,36 @@ public class SelMain extends javax.swing.JFrame {
   }
 
   public void updateBrowserList( ArrayList<Browser> browsers ) {
-   String [] newList = new String [ browsers.size( ) ];
-    for( int i = 0; i < browsers.size( ); i++ ) {
-     newList[ i ] = browsers.get( i ).getName( ); 
-   }
-    final String [] list = newList;
-   browserList.setModel( new javax.swing.AbstractListModel( ) {
-     public int getSize( ) {
-       return list.length;
-     }
+    String[ ] newList = new String[ browsers.size( ) ];
+    for ( int i = 0; i < browsers.size( ); i++ ) {
+      newList[ i ] = browsers.get( i ).getName( );
+    }
+    final String[ ] list = newList;
+    browserList.setModel( new javax.swing.AbstractListModel( ) {
 
-     public Object getElementAt( int i ) {
-       return list[ i ].toString();
-     }
-   } );
-   
+      public int getSize( ) {
+        return list.length;
+      }
+
+      public Object getElementAt( int i ) {
+        return list[ i ].toString( );
+      }
+    } );
+
     validate( );
     repaint( );
   }
 
   public void updateSiteList( SiteList sites ) {
     ArrayList<String> siteArray = sites.getSiteList( );
-    String [] newList = new String [ siteArray.size( ) ];
-    
-    for( int i = 0; i < siteArray.size( ); i++ ) {
-      newList[ i ] = siteArray.get( i ); 
+    String[ ] newList = new String[ siteArray.size( ) ];
+
+    for ( int i = 0; i < siteArray.size( ); i++ ) {
+      newList[ i ] = siteArray.get( i );
     }
-     final String [] list = newList;
+    final String[ ] list = newList;
     siteList.setModel( new javax.swing.AbstractListModel( ) {
+
       public int getSize( ) {
         return list.length;
       }
