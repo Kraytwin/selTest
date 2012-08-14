@@ -14,6 +14,7 @@
     <ConfigSetting id="BROWSER_FILE_LOCATION"><![CDATA[conf/browser.csv]]></ConfigSetting>
     <ConfigSetting id="SITE_FILE_LOCATION"><![CDATA[conf/site.txt]]></ConfigSetting>
     <ConfigSetting id="TEST_DIR_LOCATION"><![CDATA[conf/]]></ConfigSetting>
+    <ConfigSetting id="TEST_FILE_FORMAT"><![CDATA[xml]]></ConfigSetting>
     <ConfigSetting id="SETTINGS_LOCATION_OS_X"><![CDATA[.seleniumtester]]></ConfigSetting>
     <ConfigSetting id="SETTINGS_LOCATION_WIN"><![CDATA[AppData\Roaming\SeleniumTester]]></ConfigSetting>
     <ConfigSetting id="SPECIAL_CONFIG_LOCATION_OS_X"><![CDATA[Desktop/SeleniumTester/Special/]]></ConfigSetting>

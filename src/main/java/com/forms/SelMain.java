@@ -5,14 +5,20 @@
 package com.forms;
 
 import java.awt.Component;
+import java.awt.Container;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import javax.swing.JMenu;
+import javax.swing.JPopupMenu;
+import javax.swing.MenuElement;
 import javax.swing.event.ListSelectionListener;
 
 import com.core.Browser;
 import com.core.SiteList;
+import com.core.TestHandler;
 
 /**
  * 
@@ -80,8 +86,6 @@ public class SelMain extends javax.swing.JFrame {
     addPasswordMenuItem = new javax.swing.JMenuItem( );
     editTestMenuItem = new javax.swing.JMenuItem( );
 
-    createComponentMap( );
-
     setDefaultCloseOperation( javax.swing.WindowConstants.EXIT_ON_CLOSE );
 
     testList.setModel( new javax.swing.AbstractListModel( ) {
@@ -96,11 +100,6 @@ public class SelMain extends javax.swing.JFrame {
         return strings[ i ];
       }
     } );
-    jScrollPane1.setViewportView( testList );
-
-    testPreviewArea.setColumns( 20 );
-    testPreviewArea.setRows( 5 );
-    jScrollPane2.setViewportView( testPreviewArea );
 
     siteList.setModel( new javax.swing.AbstractListModel( ) {
 
@@ -114,7 +113,6 @@ public class SelMain extends javax.swing.JFrame {
         return strings[ i ];
       }
     } );
-    jScrollPane3.setViewportView( siteList );
 
     browserList.setModel( new javax.swing.AbstractListModel( ) {
 
@@ -128,12 +126,19 @@ public class SelMain extends javax.swing.JFrame {
         return strings[ i ];
       }
     } );
+
+    testPreviewArea.setColumns( 20 );
+    testPreviewArea.setRows( 5 );
+    jScrollPane1.setViewportView( testList );
+    jScrollPane2.setViewportView( testPreviewArea );
+    jScrollPane3.setViewportView( siteList );
     jScrollPane4.setViewportView( browserList );
 
     consoleTextField.setColumns( 20 );
     consoleTextField.setRows( 5 );
     jScrollPane5.setViewportView( consoleTextField );
 
+    setJMenuBar( menuBar );
     fileMenu.add( testDirMenuItem );
     fileMenu.add( jSeparator2 );
     fileMenu.add( quitMenuItem );
@@ -152,7 +157,8 @@ public class SelMain extends javax.swing.JFrame {
     testMenu.add( addPasswordMenuItem );
     testMenu.add( editTestMenuItem );
     menuBar.add( testMenu );
-    setJMenuBar( menuBar );
+
+    menuBar.getComponentCount( );
 
     testLabel.setText( "Tests" );
     testPreviewLabel.setText( "Test Preview" );
@@ -182,6 +188,29 @@ public class SelMain extends javax.swing.JFrame {
     testMenu.setText( "Test" );
     addPasswordMenuItem.setText( "Add Password" );
     editTestMenuItem.setText( "Edit Test" );
+
+    menuBar.setName( "menuBar" );
+    fileMenu.setName( "fileMenu" );
+    toolMenu.setName( "toolMenu" );
+    viewMenu.setName( "viewMenu" );
+    browserList.setName( "browserList" );
+    siteList.setName( "siteList" );
+    testList.setName( "testList" );
+    editTestButton.setName( "editTestButton" );
+    screenshotCheckbox.setName( "screenshotCheckbox" );
+    validateCSSCheckbox.setName( "validateCSSCheckbox" );
+    validateHTMLCheckbox.setName( "validateHTMLCheckbox" );
+    testDirMenuItem.setName( "testDirMenuItem" );
+    quitMenuItem.setName( "quitMenuItem" );
+    setTestDirMenuItem.setName( "setTestDirMenuItem" );
+    setBrowserFileMenuItem.setName( "setBrowserFileMenuItem" );
+    specialCommandsPropertiesMenuItem.setName( "specialCommandsPropertiesMenuItem" );
+    selPropertiesMenuItem.setName( "selPropertiesMenuItem" );
+    systemPropertiesMenuItem.setName( "systemPropertiesMenuItem" );
+    openSpecialDirMenuItem.setName( "openSpecialDirMenuItem" );
+    openSelLogMenuItem.setName( "OpenSelLogMenuItem" );
+    addPasswordMenuItem.setName( "addPasswordMenuItem" );
+    editTestMenuItem.setName( "editTestMenuItem" );
 
     javax.swing.GroupLayout layout = new javax.swing.GroupLayout( getContentPane( ) );
     getContentPane( ).setLayout( layout );
@@ -345,6 +374,8 @@ public class SelMain extends javax.swing.JFrame {
                             .addComponent( selStatusLabel ).addComponent( selStartButton ) ).addContainerGap( ) ) );
 
     pack( );
+
+    createComponentMap( );
   }// </editor-fold>//GEN-END:initComponents
 
   public void addActionListeners( ActionListener act ) {
@@ -373,6 +404,7 @@ public class SelMain extends javax.swing.JFrame {
   }
 
   public Component getComponent( String name ) {
+    System.out.println( componentMap.size( ) + " Size" );
     if ( componentMap.containsKey( name ) ) {
       return ( Component ) componentMap.get( name );
     } else {
@@ -383,8 +415,37 @@ public class SelMain extends javax.swing.JFrame {
   private void createComponentMap( ) {
     componentMap = new HashMap<String, Component>( );
     Component[ ] components = this.getContentPane( ).getComponents( );
-    for ( int i = 0; i < components.length; i++ ) {
-      componentMap.put( components[ i ].getName( ), components[ i ] );
+    for ( Component comp : components ) {
+      componentMap.put( comp.getName( ), comp );
+    }
+    this.createComponentsMap( this.getRootPane( ) );
+
+  }
+
+  private void createComponentsMap( Container c ) {
+    Component[ ] comps = c.getComponents( );
+    for ( Component comp : comps ) {
+      System.out.println( comp.getName( ) );
+      componentMap.put( comp.getName( ), comp );
+      if ( comp instanceof JMenu ) {
+        JMenu menuBar = ( JMenu ) comp;
+        MenuElement[ ] menuItems = menuBar.getSubElements( );
+        System.out.println( "Menu item size is: " + menuItems.length );
+        getMenuItems( menuBar.getSubElements( ) );
+      } else if ( comp instanceof Container ) {
+        createComponentsMap( ( Container ) comp );
+      }
+
+    }
+  }
+
+  private void getMenuItems( MenuElement[ ] menuItems ) {
+    for ( MenuElement element : menuItems ) {
+      if ( element instanceof JPopupMenu ) {
+        getMenuItems( element.getSubElements( ) );
+      }
+      Component menuItem = element.getComponent( );
+      componentMap.put( menuItem.getName( ), menuItem );
     }
   }
 
@@ -435,9 +496,32 @@ public class SelMain extends javax.swing.JFrame {
     repaint( );
   }
 
-  public void updateTestList( ArrayList<String> tests ) {
+  public void updateTestList( TestHandler th ) {
+    ArrayList<File> testArray = th.getTestList( );
+    File[ ] newList = new File[ testArray.size( ) ];
+
+    for ( int i = 0; i < testArray.size( ); i++ ) {
+      newList[ i ] = testArray.get( i );
+    }
+    final File[ ] list = newList;
+    testList.setModel( new javax.swing.AbstractListModel( ) {
+
+      public int getSize( ) {
+        return list.length;
+      }
+
+      public Object getElementAt( int i ) {
+        return list[ i ];
+      }
+
+    } );
     validate( );
     repaint( );
+  }
+
+  public void updateTestPreviewArea( int index ) {
+    testList.getModel( ).getElementAt( index );
+    testPreviewArea.append( "Test" );
   }
 
   // Variables declaration - do not modify//GEN-BEGIN:variables

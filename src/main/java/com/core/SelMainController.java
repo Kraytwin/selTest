@@ -15,24 +15,28 @@ public class SelMainController {
   private ActionListener buttonListener;
   private ListSelectionListener listListener;
   private ConfigSettings config = ConfigSettings.getInstance( );
-  private File browserLocation, siteLocation;
+  private File browserLocation, siteLocation, testDir;
   private BrowserHandler bh;
   private SiteList sl;
-  
-  
-  
+  private TestHandler th;
+  private String fileFormat;
+
   public SelMainController( ) {
-    //First need to get the relevant config settings
+    // First need to get the relevant config settings
     browserLocation = new File( this.config.getProperty( "FILE_SYSTEM.BROWSER_FILE_LOCATION" ) );
     siteLocation = new File( this.config.getProperty( "FILE_SYSTEM.SITE_FILE_LOCATION" ) );
-    
+    testDir = new File( this.config.getProperty( "FILE_SYSTEM.TEST_DIR_LOCATION" ) );
+    fileFormat = this.config.getProperty( "FILE_SYSTEM.TEST_FILE_FORMAT" );
+
     bh = new BrowserHandler( browserLocation );
     sl = new SiteList( siteLocation );
-    
+    th = new TestHandler( testDir, fileFormat );
+
     sel = new SelMain( );
 
-    this.updateBrowserList(  );
-    this.updateSiteList(  );
+    this.updateBrowserList( );
+    this.updateSiteList( );
+    this.updateTestList( );
 
     // Now to initialise the listeners.
     this.initListeners( );
@@ -40,7 +44,7 @@ public class SelMainController {
     // And now to use the listeners.
     sel.addActionListeners( buttonListener );
     sel.addListSelectionListeners( listListener );
-    
+
     sel.setVisible( true );
   }
 
@@ -59,7 +63,7 @@ public class SelMainController {
           setSpecialCommand( "validateCSSCheckbox" );
         else if ( e.getSource( ) == sel.getComponent( "testDirMenuItem" ) )
           openTestDir( );
-        else if ( e.getSource( ) == sel.getComponent( "quitMenuItem" ) )
+        else if ( e.getSource( ).equals( sel.getComponent( "quitMenuItem" ) ) )
           quit( );
         else if ( e.getSource( ) == sel.getComponent( "setTestDirMenuItem" ) )
           setTestDir( );
@@ -87,10 +91,10 @@ public class SelMainController {
         if ( !e.getValueIsAdjusting( ) )
           if ( e.getSource( ) == sel.getComponent( "browserList" ) )
             updateBrowserList( );
-          if ( e.getSource( ) == sel.getComponent( "siteList" ) )
-            updateSiteList( );
-          if ( e.getSource( ) == sel.getComponent( "testList" ) )
-            updateTestList( );
+        if ( e.getSource( ) == sel.getComponent( "siteList" ) )
+          updateSiteList( );
+        if ( e.getSource( ) == sel.getComponent( "testList" ) )
+          updateTestPreviewArea( 1 );
       }
 
     };
@@ -154,20 +158,24 @@ public class SelMainController {
     // TODO Auto-generated method stub
 
   }
-  
+
   private void updateSiteList( ) {
     sel.updateSiteList( sl );
-    
+
   }
 
   private void updateTestList( ) {
-    // TODO Auto-generated method stub
-    
+    sel.updateTestList( th );
+
   }
 
   private void updateBrowserList( ) {
     sel.updateBrowserList( bh.readBrowsers( ) );
-    
+
+  }
+
+  private void updateTestPreviewArea( int index ) {
+    sel.updateTestPreviewArea( index );
   }
 
   /**

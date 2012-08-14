@@ -1,8 +1,6 @@
 package com.core;
 
 import java.io.File;
-import java.io.FileFilter;
-import java.util.ArrayList;
 
 public class XMLCreator {
 
