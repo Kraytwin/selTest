@@ -519,9 +519,25 @@ public class SelMain extends javax.swing.JFrame {
     repaint( );
   }
 
-  public void updateTestPreviewArea( int index ) {
-    testList.getModel( ).getElementAt( index );
-    testPreviewArea.append( "Test" );
+  public void updateTestPreviewArea( String testIn, boolean editable ) {
+    testPreviewArea.setText( "" );
+    testPreviewArea.append( testIn );
+    testPreviewArea.setEditable( editable );
+  }
+
+  public File getSelectedTest( ) {
+    File test = ( File ) testList.getSelectedValue( );
+    return test;
+  }
+
+  public String[ ] getSelectedSites( ) {
+    String[ ] sites = ( String[ ] ) siteList.getSelectedValues( );
+    return sites;
+  }
+
+  public Browser[ ] getSelectedBrowsers( ) {
+    Browser[ ] browsers = ( Browser[ ] ) browserList.getSelectedValues( );
+    return browsers;
   }
 
   // Variables declaration - do not modify//GEN-BEGIN:variables

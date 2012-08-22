@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  
+  <xs:attribute name="name"/>
+  <xs:attribute name="type"/>
+  <xs:attribute name="num"/>
+
+  <xs:element name="Sequence">
+    <xs:complexType>
+     <xs:sequence>
+       <xs:element ref="NavigationUnit" maxOccurs="unbounded"/>
+     </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="NavigationUnit">
+    <xs:complexType>
+     <xs:sequence>
+       <xs:element ref="MethodName" maxOccurs="unbounded"/>
+     </xs:sequence>
+     <xs:attribute ref="name" use="required"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="MethodName">
+    <xs:complexType>
+     <xs:sequence>
+       <xs:element ref="Part" minOccurs="0" maxOccurs="unbounded"/>
+     </xs:sequence>
+     <xs:attribute ref="type" use="required"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Part">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:string">
+          <xs:attribute ref="num" use="required"/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

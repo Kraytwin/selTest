@@ -94,7 +94,7 @@ public class SelMainController {
         if ( e.getSource( ) == sel.getComponent( "siteList" ) )
           updateSiteList( );
         if ( e.getSource( ) == sel.getComponent( "testList" ) )
-          updateTestPreviewArea( 1 );
+          updateTestPreviewArea( );
       }
 
     };
@@ -174,8 +174,16 @@ public class SelMainController {
 
   }
 
-  private void updateTestPreviewArea( int index ) {
-    sel.updateTestPreviewArea( index );
+  private void updateTestPreviewArea( ) {
+    boolean editable = false;
+    String testText = "No test selected!";
+    File testFile = sel.getSelectedTest( );
+    if ( testFile != null ) {
+      Test test = new Test( testFile );
+      testText = test.toString( );
+      editable = test.isTestValid( );
+    }
+    sel.updateTestPreviewArea( testText, editable );
   }
 
   /**
