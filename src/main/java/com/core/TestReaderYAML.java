@@ -32,6 +32,7 @@ public class TestReaderYAML {
       System.out.println( file.getName( ) );
       TestYAML test = ( TestYAML ) yaml.load( is );
       System.out.println( test.getName( ) );
+      System.out.println( test.getNavigationUnits( ).get( 0 ).getMethods( ).get( 0 ).getInputs( ).get( 1 ) );
     } catch ( FileNotFoundException e ) {
       // TODO Auto-generated catch block
       e.printStackTrace( );

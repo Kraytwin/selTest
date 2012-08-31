@@ -1,10 +1,9 @@
----
-
 name: test
 url: http://10.0.0.32
-- navigation-unit:
-   name: test1
-   - method:
-      name: test2
-      - input: jsdjs
-      - input: fhfhf
+navigationUnits:
+  - name: test1
+    methods:
+      - name: test2
+        inputs:
+            - sdjhf
+            - jsdjs
